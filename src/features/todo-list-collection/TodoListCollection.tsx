@@ -7,7 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Add, Inbox } from '@material-ui/icons';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter as Router, NavLink as RouterLink, Prompt } from 'react-router-dom';
+import { NavLink as RouterLink } from 'react-router-dom';
 import {
   addNewList, selectTodoLists
 } from './todoListCollectionSlice';
@@ -38,18 +38,16 @@ export function TodoListCollection() {
   return (
     <div>
 
-      <Router>
-        <Prompt when={true} message="Are you sure" />
-        <List aria-label="main mailbox folders">
-          {
-            todoLists.map(list =>
-              <ListItemLink key={list.id} primary={
-                <span className="label">{list.name}</span>
-              } to={`/list/${list.id}`} icon={<Inbox />} />
-            )
-          }
-        </List>
-      </Router>
+      <List aria-label="main mailbox folders">
+        {
+          todoLists.map(list =>
+            <ListItemLink key={list.id} primary={
+              <span className="label">{list.name}</span>
+            } to={`/list/${list.id}`} icon={<Inbox />} />
+          )
+        }
+      </List>
+
       <Box>
         <Button onClick={() => dispatch(addNewList("New list"))}><Add>Add a new list</Add></Button>
       </Box>

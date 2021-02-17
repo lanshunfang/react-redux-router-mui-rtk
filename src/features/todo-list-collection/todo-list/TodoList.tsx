@@ -9,6 +9,7 @@ import { RootState } from 'app/store';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, NavLink as RouterLink, Prompt } from 'react-router-dom';
+import { createSelector } from 'reselect';
 import { ReactRouter } from 'typings';
 import { Todo } from '../typing';
 import {
@@ -34,15 +35,20 @@ function ListItemLink(props: Todo.ListItemLinkProps) {
   );
 }
 
-export function TodoList({ match }: ReactRouter.RouteComponentProps<string>) {
+export function TodoList({ match }: ReactRouter.RouteComponentProps<Todo.TodoListProps>) {
 
   const dispatch = useDispatch();
 
-  let id = match.params;
+  const selectTodo = createSelector(
+    (state: RootState) => {
 
-  const todoList: Todo.TodoList | undefined = useSelector(
-    (state: RootState) => state.todoListCollection.todoLists.find(todo => todo.id === id)
+      return state.todoListCollection.todoLists;
+    },
+    () => match.params.id,
+    (todoLists, id) => todoLists.find(todo => todo.id === id)
   );
+
+  const todoList: Todo.TodoList | undefined = useSelector(selectTodo);
 
   if (!todoList) {
     return (
