@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppThunk } from '@_app/store';
+import { AppThunk } from 'app/store';
 import { v4 as uuidv4 } from 'uuid';
 import { Todo } from '../typing';
-
 
 const initialState: Todo.TodoList = {
   name: 'Loading list',
@@ -24,7 +23,7 @@ export const todoListSlice = createSlice({
       const todoId = action.payload as string;
       state.todos = state.todos.filter(todo => todo.id !== todoId);
     },
-    
+
   },
 });
 
@@ -40,12 +39,12 @@ export const addNewTodo = (label: string): AppThunk => dispatch => {
     id: uuidv4(),
     description: ''
   };
-  
+
   dispatch(add(newTodo));
 };
 
 export const removeATodo = (id: string): AppThunk => dispatch => {
-  
+
   dispatch(remove({
     payload: id
   }));

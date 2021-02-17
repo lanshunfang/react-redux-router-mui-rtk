@@ -3,11 +3,11 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import { TodoList, TodoListCollection } from 'features/todo-list-collection';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import AppTopBar from './AppTopBar';
-import { TodoList, TodoListCollection } from './features/todo-list-collection';
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
           <Grid item sm={12} lg={9}>
             <Router>
               <Switch>
-                <Route path="/list/:id"><Paper><TodoList /></Paper></Route>
+                <Route path="/list/:id" component={TodoList}></Route>
               </Switch>
 
             </Router>

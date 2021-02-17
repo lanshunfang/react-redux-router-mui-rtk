@@ -5,10 +5,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 // import styles from './TodoList.module.scss';
 import { Add } from '@material-ui/icons';
-import { RootState } from '@_app/store';
+import { RootState } from 'app/store';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter as Router, NavLink as RouterLink, Prompt, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, NavLink as RouterLink, Prompt } from 'react-router-dom';
+import { ReactRouter } from 'typings';
 import { Todo } from '../typing';
 import {
   addNewTodo
@@ -33,17 +34,23 @@ function ListItemLink(props: Todo.ListItemLinkProps) {
   );
 }
 
-export function TodoList() {
+export function TodoList({ match }: ReactRouter.RouteComponentProps<string>) {
 
-  let { id } = useParams() as Todo.TodoListProps;
-
-  const todoList: Todo.TodoList = useSelector(
-    (state: RootState) => state.todoListCollection.todoLists.find(todo => todo.id === id) || {
-      name: 'Unknow list',
-      todos: []
-    }
-  );
   const dispatch = useDispatch();
+
+  let id = match.params;
+
+  const todoList: Todo.TodoList | undefined = useSelector(
+    (state: RootState) => state.todoListCollection.todoLists.find(todo => todo.id === id)
+  );
+
+  if (!todoList) {
+    return (
+      <section>
+        <h2>The not found!</h2>
+      </section>
+    )
+  }
 
   return (
     <div>
