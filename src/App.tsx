@@ -7,8 +7,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import AppTopBar from './AppTopBar';
-import { TodoListCollection } from './features/todo-list-collection/TodoListCollection';
-
+import { TodoList, TodoListCollection } from './features/todo-list-collection';
 
 function App() {
   return (
@@ -26,7 +25,7 @@ function App() {
           <Grid item sm={12} lg={9}>
             <Router>
               <Switch>
-                <Route path="/list/:id"><Paper>List todos placeholder</Paper></Route>
+                <Route path="/list/:id"><Paper><TodoList /></Paper></Route>
               </Switch>
 
             </Router>
