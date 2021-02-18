@@ -13,6 +13,8 @@ import {
 } from './todoListCollectionSlice';
 import { Todo } from './typing';
 
+export { todoListCollectionSliceReducer } from './todoListCollectionSlice';
+
 function ListItemLink(props: Todo.ListItemLinkProps) {
   const { icon, primary, to } = props;
 

@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { AppThunk } from 'app/store';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { AppThunk, RootState } from 'app/store';
 import { v4 as uuidv4 } from 'uuid';
 import { Todo } from '../typing';
 
@@ -8,18 +8,21 @@ const initialState: Todo.TodoList = {
   todos: []
 };
 
+
+const findTodoById = (todoLists: Todo.TodoList[], id: string) => todoLists.find(todo => todo.id === id);
+
 export const todoListSlice = createSlice({
   name: 'todoList',
   initialState,
   reducers: {
-    add: (state, action) => {
+    add(state, action) {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.todos.push(action.payload as Todo.Todo);
     },
-    remove: (state, action) => {
+    remove(state, action) {
       const todoId = action.payload as string;
       state.todos = state.todos.filter(todo => todo.id !== todoId);
     },
@@ -45,22 +48,19 @@ export const addNewTodo = (label: string): AppThunk => dispatch => {
 
 export const removeATodo = (id: string): AppThunk => dispatch => {
 
-  dispatch(remove({
-    payload: id
-  }));
+  dispatch(remove(id));
 };
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-//export const selectTodo = (state: RootState) => state.todoListCollection.todoLists;
 
-// const param = useParams()
-// const getId = (_, props as TodoListProps) => props.id;
-// const getTodoLists = (state, props as TodoListProps) => state.todoListCollection[props.id];
-// export const selectTodo = createSelector([
-//   getId,
-//   getTodoLists,
-// ], (id, todoList) => {return todoList[id]});
+export const selectTodo = (getRouterParams: () => Todo.TodoListProps) => {
+  return createSelector(
+    (state: RootState) => state.todoListCollection.todoLists,
+    () => getRouterParams().id,
+    findTodoById
+  );
 
-export default todoListSlice.reducer;
+}
+export const todoListSliceReducer = todoListSlice.reducer;
