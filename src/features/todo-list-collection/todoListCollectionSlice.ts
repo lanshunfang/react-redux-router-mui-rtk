@@ -5,8 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { todoListSlice } from './todo-list';
 import { Todo } from './typing';
 
-
-
 const initialState: Todo.TodoListCollection = {
   todoLists: []
 };
