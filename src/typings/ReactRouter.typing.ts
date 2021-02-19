@@ -15,4 +15,9 @@ export namespace ReactRouter {
 		path: string;
 		url: string;
 	}
+
+	export interface ReduxConnected<P> {
+		params: P,
+		match: match<P>,
+	}
 }
