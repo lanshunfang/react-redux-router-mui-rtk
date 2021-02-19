@@ -5,7 +5,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink as RouterLink, Redirect } from 'react-router-dom';
+import { NavLink as RouterLink, Redirect, useRouteMatch } from 'react-router-dom';
 import { ReactRouter } from 'typings';
 import { Todo } from '../typing';
 import { TodoListNewTodo } from './TodoListNewTodo';
@@ -30,13 +30,18 @@ function ListItemLink(props: Todo.ListItemLinkProps) {
   );
 }
 
-export function TodoList({ match }: ReactRouter.RouteComponentProps<Todo.TodoListProps>) {
+// export function TodoList({ match }: ReactRouter.RouteComponentProps<Todo.TodoListProps>) {
+export function TodoList() {
 
   // const dispatch = useDispatch();
 
+  const match = useRouteMatch('/list/:id') as ReactRouter.match;
+
   const todoList: Todo.TodoList | undefined = useSelector(
     selectTodo(
-      () => match.params
+      () => {
+        return match.params as Todo.TodoListProps;
+      }
     )
   );
 

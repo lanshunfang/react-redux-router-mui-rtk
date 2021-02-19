@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { ReactRouter } from 'typings';
 import {
   updateReduxRoute
@@ -7,14 +9,24 @@ import {
 
 export { routerStateSliceReducer, selectRouterState } from './routerStateSlice';
 
-export function RouterState({ match }: ReactRouter.RouteComponentProps<any>) {
+export function RouterState({ match }: ReactRouter.RouteComponentProps) {
   const dispatch = useDispatch();
-  useEffect(
-    () => {
-      dispatch(updateReduxRoute(match))
-    },
-    [match.url]
-  )
+  const location = useLocation();
+
+  // useEffect(
+  //   () => {
+  //     dispatch(updateReduxRoute(match))
+  //   },
+  //   [location]
+  // )
+  useSelector(
+    createSelector(
+      () => location,
+      (location) => {
+        dispatch(updateReduxRoute({ location }));
+      }
+    )
+  );
 
   return (
     <React.Fragment></React.Fragment>

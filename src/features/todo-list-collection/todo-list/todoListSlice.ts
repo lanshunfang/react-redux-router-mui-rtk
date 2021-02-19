@@ -3,10 +3,10 @@ import { AppThunk, RootState } from 'app/store';
 import { v4 as uuidv4 } from 'uuid';
 import { Todo } from '../typing';
 
-const initialState: Todo.TodoList = {
+const initialState: Todo.TodoList[] = [{
   name: 'Loading list',
   todos: []
-};
+}];
 
 
 const findTodoById = (todoLists: Todo.TodoList[], id: string) => todoLists.find(todo => todo.id === id);
@@ -20,11 +20,23 @@ export const todoListSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.todos.push(action.payload as Todo.Todo);
+      const payload = action.payload as Todo.Todo;
+      const list = findTodoById(state, payload.listId);
+      if (!list) {
+        console.error(`[ERROR] The list with id ${payload.listId} doesn't exist.`);
+        return;
+      }
+
+      list.todos.push(payload);
     },
     remove(state, action) {
       const todoId = action.payload as string;
-      state.todos = state.todos.filter(todo => todo.id !== todoId);
+      const list = findTodoById(state, todoId);
+      if (!list) {
+        console.error(`[ERROR] The list with id ${todoId} doesn't exist.`);
+        return;
+      }
+      list.todos = list.todos.filter(todo => todo.id !== todoId);
     },
 
   },
@@ -36,10 +48,11 @@ export const { add, remove } = todoListSlice.actions;
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const addNewTodo = (label: string): AppThunk => dispatch => {
+export const addNewTodo = (label: string, listId: string): AppThunk => dispatch => {
   const newTodo: Todo.Todo = {
     label,
     id: uuidv4(),
+    listId,
     description: ''
   };
 

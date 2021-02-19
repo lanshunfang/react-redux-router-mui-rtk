@@ -1,7 +1,8 @@
 import { Button, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Prompt } from 'react-router-dom';
+import { Prompt, useParams } from 'react-router-dom';
+import { Todo } from '../typing';
 import {
   addNewTodo
 } from './todoListSlice';
@@ -13,8 +14,10 @@ export function TodoListNewTodo() {
 
   const dispatch = useDispatch();
 
+  const params = useParams() as Todo.TodoListProps;
+
   const handleSubmit = (event: React.FormEvent<HTMLElement>) => {
-    dispatch(addNewTodo(inputValue));
+    dispatch(addNewTodo(inputValue, params.id));
     setInputValue("");
     event.preventDefault();
   };
